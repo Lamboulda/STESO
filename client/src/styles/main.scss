@@ -1,0 +1,29 @@
+@use 'variables' as *;
+@use 'navbar' as *;
+@use 'footer' as *;
+@use 'app' as *;
+@use 'videogrid' as *;
+@use 'imagegallery' as *;
+@use 'infosection' as *;
+@use 'college' as *;
+@use 'login' as *;
+@use 'register' as *;
+@use 'flextable' as *;
+@use 'mentionslegales' as *;
+@use 'contact' as *;
+@use 'formation' as *;
+@use 'profil' as *;
+@use 'userlist' as *;
+@use 'infoscomplementaires' as *;
+@import url('https://fonts.googleapis.com/css2?family=Lora&family=Poppins:wght@400;600&display=swap');
+
+body {
+  font-family: 'Lora', serif;
+  margin: 0;
+  background-color: $background-color;
+  color: $text-color;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'Poppins', sans-serif;
+}
