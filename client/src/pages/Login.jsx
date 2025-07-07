@@ -57,7 +57,7 @@ const Login = () => {
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login
