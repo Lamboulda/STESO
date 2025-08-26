@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/user'
+const API_URL = 'https://steso.onrender.com'
 
 const authHeader = () => {
   const token = localStorage.getItem('token')

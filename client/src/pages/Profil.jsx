@@ -11,7 +11,7 @@ const Profil = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/users/${user.id}`, {
+        const response = await fetch(`https://steso.onrender.com/users/${user.id}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -49,7 +49,7 @@ const Profil = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const response = await fetch(`http://localhost:3000/users/${user.id}`, {
+      const response = await fetch(`https://steso.onrender.com/users/${user.id}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -72,7 +72,7 @@ const Profil = () => {
   const handleDelete = async () => {
     if (!window.confirm('Voulez-vous vraiment supprimer ce profil ?')) return
     try {
-      const response = await fetch(`http://localhost:3000/users/${user.id}`, {
+      const response = await fetch(`https://steso.onrender.com/users/${user.id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`,

@@ -12,7 +12,7 @@ const Alumni = () => {
         return
     }
       try {
-        const response = await fetch('http://localhost:3000/alumni/all', {
+        const response = await fetch('https://steso.onrender.com/alumni/all', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
