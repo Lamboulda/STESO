@@ -1,19 +1,20 @@
 import { useState, useContext } from 'react'
-import { createFormation, fetchFormations } from '../services/formationService'
+import { createFormation} from '../services/formationService'
 import { AuthContext } from '../context/AuthContext'
 
 const AddFormation = ({ onAdded }) => {
 
-  const { user } = useContext(AuthContext) // user.role doit être 'admin' pour pouvoir ajouter
+  const { user } = useContext(AuthContext)
+
+  if (!user?.isAdmin) {
+    return null
+  }
+
   const [form, setForm] = useState({
     title: '',
     description: '',
     level: '',
   })
-
-  if (!user || user.role !== 'admin') {
-    return null
-  }
 
   const handleChange = (e) => {
     setForm({...form, [e.target.name]: e.target.value})

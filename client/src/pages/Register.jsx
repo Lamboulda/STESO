@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import axios from 'axios'
 import { useNavigate } from 'react-router'
 import { Link } from "react-router-dom"
 import logo from '../assets/logo.png'
@@ -16,14 +15,24 @@ const Register = () => {
   const handleRegistration = async (e) => {
     e.preventDefault()
     try {
-      const res = await axios.post('https://steso.onrender.com/auth/register', form)
-      if (res.status === 201) {
-        alert(res.data)
-        navigate('/')
-      }
+      const response = await fetch('http://localhost:3000/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(form),
+    })
+      const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || `Erreur lors de l'inscription.`)
+    }
+
+    alert(data.message || 'Inscription réussie.')
+    navigate('/')
     } catch (err) {
       console.error(err)
-      if (err?.response?.data) alert(err.response.data)
+      alert(err.message || 'Une erreur est survenue.')
     }
   }
 

@@ -12,7 +12,7 @@ import Contact from './pages/Contact.jsx'
 import InfosComplementaires from './pages/InfosComplementaires.jsx'
 import MentionsLegales from './pages/MentionsLegales.jsx'
 import Profil from './pages/Profil.jsx'
-import UserList from './components/UserList.jsx'
+import Alumni from './components/Alumni.jsx'
 
 const MyRouter = () => {
 
@@ -29,7 +29,7 @@ const MyRouter = () => {
                     <Route path="/profil" element={<Profil />} />
                     <Route path='*' element={<p>404 Not found</p>}/>
                     <Route path="/contact" element={<Contact />} />
-                    <Route path="/users" element={<UserList />} />
+                    <Route path="/alumni" element={<Alumni />} />
                     <Route path="/infos-complementaires" element={<InfosComplementaires />} />
                     <Route path="/mentions-legales" element={<MentionsLegales />} />
             </Routes>

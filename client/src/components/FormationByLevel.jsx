@@ -1,13 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react'
 import {fetchFormations, deleteFormation, updateFormation} from '../services/formationService'
 import AddFormation from './AddFormation'
+import { AuthContext } from '../context/AuthContext'
 
 const FormationByLevel = ({ level }) => {
   const [formations, setFormations] = useState([])
   const [editId, setEditId] = useState(null)
   const [editData, setEditData] = useState({ title: '', description: '' })
 
-  const role = JSON.parse(localStorage.getItem("user"))?.role || "user"
+  const { user } = useContext(AuthContext)
+  console.log("user in AuthContext:", user)
+
+  const isAdmin = !!user?.isAdmin
 
   const loadFormations = async () => {
     try {
@@ -35,7 +39,7 @@ const FormationByLevel = ({ level }) => {
   }
 
   const handleEditClick = (formation) => {
-    setEditId(formation._id)
+    setEditId(formation.id)
     setEditData({ title: formation.title, description: formation.description })
   }
 
@@ -52,12 +56,12 @@ const FormationByLevel = ({ level }) => {
 
   return (
     <div className="formation-section">
-      {role === 'admin' && <AddFormation onAdded={loadFormations} />}
+      {isAdmin && <AddFormation onAdded={loadFormations} />}
 
       <div className="formation-list">
         {formations.map((formation) => (
-          <div key={formation._id} className="formation-card">
-            {editId === formation._id ? (
+          <div key={formation.id} className="formation-card">
+            {editId === formation.id ? (
               <form onSubmit={handleEditSubmit} className="edit-form">
                 <input
                   type="text"
@@ -84,12 +88,12 @@ const FormationByLevel = ({ level }) => {
                 <h3>{formation.title}</h3>
                 <p>{formation.description}</p>
 
-                {role === 'admin' && (
+                {isAdmin && (
                   <div className="button-group">
                     <button onClick={() => handleEditClick(formation)}>
                       Modifier
                     </button>
-                    <button onClick={() => handleDelete(formation._id)}>
+                    <button onClick={() => handleDelete(formation.id)}>
                       Supprimer
                     </button>
                   </div>

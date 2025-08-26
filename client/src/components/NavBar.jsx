@@ -55,7 +55,7 @@ const NavBar = () => {
               <Link to="/profil" className="navbar__link" onClick={handleLinkClick}>
                 Mon Profil
               </Link>
-              <Link to="/users" className="navbar__link" onClick={handleLinkClick}>
+              <Link to="/alumni" className="navbar__link" onClick={handleLinkClick}>
                 Liste utilisateurs
               </Link>
               <button className="navbar__link navbar__link--button" onClick={handleLogout}>

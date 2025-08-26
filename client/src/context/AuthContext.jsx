@@ -1,6 +1,5 @@
 import { useState, createContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
 
 export const AuthContext = createContext(null)
 
@@ -22,21 +21,29 @@ export const AuthController = ({ children }) => {
   const handleLogin = async (e, infoUser) => {
     e.preventDefault()
     try {
-      const response = await axios.post('https://steso.onrender.com/auth/login', infoUser, {
-        withCredentials: true,
+      const response = await fetch('http://localhost:3000/auth/login', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      body: JSON.stringify(infoUser),
       })
 
-      if (response.status === 200) {
-        const { token, user, message } = response.data
-        localStorage.setItem('token', token)
-        localStorage.setItem('user', JSON.stringify(user))
-        setUser(user)
-        setIsAuthenticated(true)
-        alert(message)
-        navigate('/')
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.message || 'Erreur lors de la connexion')
       }
+
+      const { token, user, message } = await response.json()
+      localStorage.setItem('token', token)
+      localStorage.setItem('user', JSON.stringify(user))
+      setUser(user)
+      setIsAuthenticated(true)
+      alert(message)
+      navigate('/')
     } catch (err) {
-      alert(err.response?.data?.message || 'Erreur lors de la connexion')
+      alert(err.message || 'Erreur lors de la connexion')
     }
   }
 

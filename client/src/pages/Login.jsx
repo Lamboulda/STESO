@@ -7,7 +7,7 @@ const Login = () => {
   const [infoUser, setInfoUser] = useState({
     email: '',
     password: ''
-  });
+  })
 
   const { handleLogin } = useContext(AuthContext)
 

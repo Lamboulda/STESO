@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext } from 'react'
-import axios from 'axios'
 import { AuthContext } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 
@@ -12,22 +11,32 @@ const Profil = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get(`https://steso.onrender.com/users/${user.id}`, {
+        const response = await fetch(`http://localhost:3000/users/${user.id}`, {
+          method: 'GET',
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
           },
         })
-        setProfile(res.data)
+
+        if (!response.ok) {
+          const errorData = await response.json()
+          throw new Error(errorData.message || 'Erreur lors du chargement du profil')
+        }
+
+        const data = await response.json()
+
+        setProfile(data)
         setForm({
-            first_name: res.data.first_name,
-            last_name: res.data.last_name,
-            email: res.data.email,
-            bio: res.data.bio })
+            first_name: data.first_name,
+            last_name: data.last_name,
+            email: data.email,
+            bio: data.bio })
       } catch (err) {
         console.error('Erreur lors du chargement du profil', err)
       }
     }
-
+    console.log('User from context:', user)
     if (user?.id) {
       fetchProfile()
     }
@@ -40,12 +49,21 @@ const Profil = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      await axios.put(`https://steso.onrender.com/users/${user.id}`, form, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
-      alert('Profil mis à jour avec succès !')
+      const response = await fetch(`http://localhost:3000/users/${user.id}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(form),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.message || 'Erreur lors de la mise à jour')
+    }
+
+    alert('Profil mis à jour avec succès !')
     } catch (err) {
       alert('Erreur lors de la mise à jour du profil.')
     }
@@ -54,11 +72,17 @@ const Profil = () => {
   const handleDelete = async () => {
     if (!window.confirm('Voulez-vous vraiment supprimer ce profil ?')) return
     try {
-      await axios.delete(`https://steso.onrender.com/users/${user.id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
+      const response = await fetch(`http://localhost:3000/users/${user.id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.message || 'Erreur lors de la suppression')
+    }
       alert('Profil supprimé.')
       handleLogout()
       navigate('/')
@@ -110,7 +134,7 @@ const Profil = () => {
         <button type="submit">Modifier le profil</button>
       </form>
 
-      {user.role === 'admin' && (
+      {user.isAdmin && (
         <button className="delete-button" onClick={handleDelete}>
           Supprimer ce profil
         </button>
