@@ -1,24 +1,26 @@
-import User from "../models/user.js"
-import mongoose from 'mongoose'
+import db from '../database/db.js'
+import { validationResult } from 'express-validator'
+
+const { User, Admin } = db
 
 // GET - Infos du profil
 export const getUser = async (req, res) => {
   const { id } = req.params
 
-  // On empêche un utilisateur de consulter un autre profil
-  if (req.user.id !== id && req.user.role !== "admin") {
+  // On empêche un utilisateur de consulter un autre profil sauf si adminMiddleware a ajouté req.admin
+  if (parseInt(req.user.id) !== parseInt(id) && !req.admin) {
     return res.status(403).json("Accès refusé")
   }
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json("ID invalide")
-  }
-
   try {
-    const user = await User.findById(id).select("-password -role")
+    const user = await User.findByPk(id, {
+      attributes: { exclude: ['password'] },
+    })
     if (!user) return res.status(404).json("Utilisateur non trouvé")
+
     res.status(200).json(user)
   } catch (err) {
+    console.error(err)
     res.status(500).json("Erreur serveur")
   }
 }
@@ -28,7 +30,7 @@ export const updateUser = async (req, res) => {
   const { id } = req.params
   const errors = validationResult(req)
 
-  if (req.user.id !== id && req.user.role !== "admin") {
+  if (parseInt(req.user.id) !== parseInt(id) && !req.admin) {
     return res.status(403).json("Accès refusé")
   }
 
@@ -46,14 +48,18 @@ export const updateUser = async (req, res) => {
   })
 
   try {
-    const { role, ...safeData } = req.body;
-    const updated = await User.findByIdAndUpdate(id, safeData,
-      { new: true,
-        runValidators: true,
-      }).select("-password")
+    const user = await User.findByPk(id)
+    if (!user) return res.status(404).json("Utilisateur non trouvé")
 
-    res.status(200).json(updated)
+    await user.update(safeData)
+
+    const updatedUser = await User.findByPk(id, {
+      attributes: { exclude: ['password'] },
+    })
+
+    res.status(200).json(updatedUser)
   } catch (err) {
+    console.error(err)
     res.status(500).json("Erreur lors de la mise à jour du profil")
   }
 }
@@ -62,21 +68,19 @@ export const updateUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
   const { id } = req.params
 
+  if (!req.admin) {
+    return res.status(403).json("Accès refusé : réservé aux admins")
+  }
+
   try {
-    const deleted = await User.findByIdAndDelete(id);
-    if (!deleted) return res.status(404).json("Utilisateur non trouvé")
+    const user = await User.findByPk(id)
+    if (!user) return res.status(404).json("Utilisateur non trouvé")
+
+    await user.destroy()
+
     res.status(200).json("Utilisateur supprimé avec succès")
   } catch (err) {
+    console.error(err)
     res.status(500).json("Erreur lors de la suppression du profil")
-  }
-}
-
-// GET - Tous les utilisateurs sauf les admins
-export const getAllNonAdminUsers = async (req, res) => {
-  try {
-    const users = await User.find({ role: { $ne: 'admin' } }).select("first_name last_name email bio _id")
-    res.status(200).json(users)
-  } catch (err) {
-    res.status(500).json("Erreur lors de la récupération des utilisateurs")
   }
 }

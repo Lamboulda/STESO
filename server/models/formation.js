@@ -1,26 +1,41 @@
-import mongoose, {Schema} from "mongoose"
-
-const formationSchema = new Schema({
+export default (sequelize, DataTypes) => {
+  const Formation = sequelize.define('Formation', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
     title: {
-        type: String,
-        required: true,
-        trim: true
+      type: DataTypes.STRING,
+      allowNull: false,
+      set(value) {
+        this.setDataValue('title', value.trim())
+      }
     },
-    description: String,
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
     level: {
-        type: String,
-        enum: ['college', 'lyceepro', 'lyceegen', 'bac+2'],
-        default: 'collège',
+      type: DataTypes.ENUM('college', 'lyceepro', 'lyceegen', 'bac+2'),
+      allowNull: false,
+      defaultValue: 'college',
     },
-    createdBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Pour savoir qui a créé la formation
-        required: true,
+    users_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
-    createdAt: {
-        type: Date,
-        required: true,
-        default: Date.now }
-}, { timestamps: true })
+    duration: {
+      type: DataTypes.STRING,
+    },
+    created_at: {
+      type: DataTypes.DATEONLY,
+      defaultValue: DataTypes.NOW,
+    },
+  }, {
+    tableName: 'formations',
+    timestamps: true,
+  })
 
-export default mongoose.model('Formation', formationSchema)
+  return Formation
+}

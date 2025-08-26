@@ -1,38 +1,57 @@
-import mongoose, {Schema} from 'mongoose'
+export default(sequelize, DataTypes) =>{
+  const User = sequelize.define('User', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    first_name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    last_name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        isEmail: true,
+      },
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    bio: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    created_at: {
+      type: DataTypes.DATEONLY,
+      defaultValue: DataTypes.NOW,
+    },
+  }, {
+    tableName: 'users',
+    timestamps: false,
+  })
 
-const userSchema = new Schema({
-    first_name : {
-        type : String,
-        required : true,
-        trim: true
-    },
-    last_name : {
-        type : String,
-        required : true,
-        trim: true
-    },
-    email : {
-        type : String,
-        required : true,
-        unique : true,
-        lowercase: true,
-        trim: true
-    },
-    password : {
-        type : String,
-        required : true,
-    },
-    bio : {
-        type : String,
-        trim: true
-    },
-    role : {
-        type : String,
-        enum: ['user', 'admin'],
-        default: 'user'
-    }
-})
+  // Hooks pour trim les champs avant création et mise à jour
+  User.beforeCreate((user) => {
+    if (user.first_name) user.first_name = user.first_name.trim()
+    if (user.last_name) user.last_name = user.last_name.trim()
+    if (user.email) user.email = user.email.trim().toLowerCase()
+    if (user.bio) user.bio = user.bio.trim()
+  })
 
-const User = mongoose.models.User || mongoose.model('User', userSchema)
+  User.beforeUpdate((user) => {
+    if (user.first_name) user.first_name = user.first_name.trim()
+    if (user.last_name) user.last_name = user.last_name.trim()
+    if (user.email) user.email = user.email.trim().toLowerCase()
+    if (user.bio) user.bio = user.bio.trim()
+  })
 
-export default User
+  return User
+}

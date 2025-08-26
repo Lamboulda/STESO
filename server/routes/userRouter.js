@@ -1,7 +1,7 @@
 import express from 'express'
 import { authMiddleware, adminMiddleware } from '../middleware/authMiddleware.js'
-import { getUser, updateUser, deleteUser, getAllNonAdminUsers } from '../controllers/userController.js'
-import { body, validationResult } from "express-validator"
+import { getUser, updateUser, deleteUser} from '../controllers/userController.js'
+import { body } from "express-validator"
 
 const userRouter = express.Router()
 
@@ -14,7 +14,5 @@ userRouter.put('/:id', authMiddleware,
     body("bio").optional().trim().escape()
   ], updateUser)
 userRouter.delete('/:id', authMiddleware, adminMiddleware, deleteUser)
-userRouter.get("/all", authMiddleware, getAllNonAdminUsers)
-
 
 export default userRouter
