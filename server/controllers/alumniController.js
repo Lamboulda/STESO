@@ -18,7 +18,7 @@ export const getAllAlumni = async (req, res) => {
         }
       ],
       where: {
-        '$Admin.user_id$': null // Exclut les admins
+        '$admin.user_id$': null // Exclut les admins
       },
       attributes: ['id', 'first_name', 'last_name', 'email', 'bio'],
     })
