@@ -58,7 +58,7 @@ const NavBar = () => {
               <Link to="/alumni" className="navbar__link" onClick={handleLinkClick}>
                 Liste utilisateurs
               </Link>
-              {isAuthenticated && user?.isAdmin && (
+              { user?.isAdmin && (
                 <Link to="/actions" className="navbar__link" onClick={handleLinkClick}>
                   Actions admin
                 </Link>
