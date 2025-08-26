@@ -5,7 +5,7 @@ import { AuthContext } from "../context/AuthContext"
 
 const NavBar = () => {
   const { scrolled } = useContext(ScrollContext)
-  const { isAuthenticated, handleLogout } = useContext(AuthContext);
+  const { isAuthenticated, handleLogout, user } = useContext(AuthContext)
   const [menuOpen, setMenuOpen] = useState(false)
 
   const handleLinkClick = () => {
@@ -58,6 +58,12 @@ const NavBar = () => {
               <Link to="/alumni" className="navbar__link" onClick={handleLinkClick}>
                 Liste utilisateurs
               </Link>
+              {isAuthenticated && user?.isAdmin && (
+                <Link to="/actions" className="navbar__link" onClick={handleLinkClick}>
+                  Actions admin
+                </Link>
+              )}
+
               <button className="navbar__link navbar__link--button" onClick={handleLogout}>
                 Se déconnecter
               </button>

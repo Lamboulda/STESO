@@ -13,6 +13,7 @@ import InfosComplementaires from './pages/InfosComplementaires.jsx'
 import MentionsLegales from './pages/MentionsLegales.jsx'
 import Profil from './pages/Profil.jsx'
 import Alumni from './pages/Alumni.jsx'
+import AdminActions from './pages/AdminActions.jsx'
 
 const MyRouter = () => {
 
@@ -30,6 +31,7 @@ const MyRouter = () => {
                     <Route path='*' element={<p>404 Not found</p>}/>
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/alumni" element={<Alumni />} />
+                    <Route path="/admin-actions" element={<AdminActions />} />
                     <Route path="/infos-complementaires" element={<InfosComplementaires />} />
                     <Route path="/mentions-legales" element={<MentionsLegales />} />
             </Routes>

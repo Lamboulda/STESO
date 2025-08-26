@@ -1,0 +1,60 @@
+.admin-actions {
+  padding: 2rem;
+  font-family: 'Arial', sans-serif;
+
+  &__title {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  &__loading,
+  &__error,
+  &__empty {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-top: 2rem;
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+
+    @media (min-width: 600px) {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+  }
+
+  &__item {
+    width: 100%;
+  }
+
+  &__card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+    &:focus-within {
+      outline: 2px solid #005fcc;
+    }
+  }
+
+  &__card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #222;
+  }
+
+  &__card-action,
+  &__card-details,
+  &__card-date {
+    font-size: 1rem;
+    margin: 0.25rem 0;
+    color: #444;
+  }
+}
