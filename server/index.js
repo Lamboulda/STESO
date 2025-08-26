@@ -7,6 +7,7 @@ import formationRouter from './routes/formationRouter.js'
 import userRouter from './routes/userRouter.js'
 import contactRouter from './routes/contactRouter.js'
 import alumniRouter from './routes/alumniRouter.js'
+import adminActionsRouter from './routes/adminActions.js'
 
 const app = express()
 const PORT = process.env.PORT
@@ -23,6 +24,7 @@ app.use('/formations', formationRouter)
 app.use("/users", userRouter)
 app.use('/alumni', alumniRouter)
 app.use('/contact', contactRouter)
+app.use('/actions', adminActionsRouter)
 
 app.get('/', (req, res) => {
   res.send('Bienvenue')
