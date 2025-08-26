@@ -12,7 +12,7 @@ import Contact from './pages/Contact.jsx'
 import InfosComplementaires from './pages/InfosComplementaires.jsx'
 import MentionsLegales from './pages/MentionsLegales.jsx'
 import Profil from './pages/Profil.jsx'
-import Alumni from './components/Alumni.jsx'
+import Alumni from './pages/Alumni.jsx'
 
 const MyRouter = () => {
 
